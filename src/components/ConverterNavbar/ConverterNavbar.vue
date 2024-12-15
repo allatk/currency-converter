@@ -1,21 +1,16 @@
 <template>
-  <div class="home">
-    <div class="menu">
-      <div class="container">
-        <nav class="nav-bar">
-          <RouterLink to="/">Converter</RouterLink>
-          <RouterLink to="/rates">Current rates</RouterLink>
-        </nav>
-      </div>
-    </div>
+  <div class="menu">
     <div class="container">
-      <RouterView />
+      <nav class="nav-bar">
+        <RouterLink to="/">Converter</RouterLink>
+        <RouterLink to="/rates">Current rates</RouterLink>
+      </nav>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink } from 'vue-router'
 </script>
 
 <style scoped>
@@ -31,7 +26,7 @@ import { RouterLink, RouterView } from 'vue-router'
 }
 
 nav a.router-link-exact-active {
-  color: var(--color-text);
+  color: var(--cc-color-text-active);
 }
 
 nav a.router-link-exact-active:hover {
@@ -41,10 +36,13 @@ nav a.router-link-exact-active:hover {
 nav a {
   display: inline-block;
   padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+  border-left: var(--color-border);
+  font-size: 18px;
+  font-weight: 600;
 }
 
 nav a:first-of-type {
+  padding-left: 0;
   border: 0;
 }
 </style>

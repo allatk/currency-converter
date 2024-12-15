@@ -1,11 +1,6 @@
 import axios from 'axios'
+const API_BASE_URL = 'https://api.exchangerate-api.com/v4/latest'
 
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VUE_APP_API_SERVER_URL,
-
-  validateStatus: (status) => status < 500,
-
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: API_BASE_URL,
 })
