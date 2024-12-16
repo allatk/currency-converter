@@ -33,7 +33,7 @@ export function useCurrency() {
         value,
       }))
 
-      const favoriteCurrencies = new Set(getFavouriteCurrencies())
+      const favoriteCurrencies = getFavouriteCurrencies()
       conversionRates.value = sortRates(fetchedRates, favoriteCurrencies)
     } catch (error) {
       console.error('Failed to fetch rates:', error)

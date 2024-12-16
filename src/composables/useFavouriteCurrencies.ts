@@ -18,7 +18,7 @@ export function useFavouriteCurrencies() {
   }
 
   const getFavouriteCurrencies = () => {
-    return [...favouriteCurrencies.value]
+    return favouriteCurrencies.value
   }
 
   return {
