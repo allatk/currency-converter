@@ -22,6 +22,23 @@ export function useCurrency() {
 
   const { getFavouriteCurrencies } = useFavouriteCurrencies()
 
+  const sortRates = (
+    rates: CurrencyRateItem[],
+    favoriteCurrencies: Set<string>,
+  ): CurrencyRateItem[] => {
+    return rates.sort((a, b) => {
+      const aIsFavorite = favoriteCurrencies.has(a.label) ? 1 : 0
+      const bIsFavorite = favoriteCurrencies.has(b.label) ? 1 : 0
+      return bIsFavorite - aIsFavorite
+    })
+  }
+
+  const calculateTargetValue = () => {
+    const targetRate =
+      conversionRates.value.find((rate) => rate.label === targetCurrency.label)?.value || 1
+    culcResult.value = Number((baseCurrency.value * targetRate).toFixed(3))
+  }
+
   const loadRates = async () => {
     isLoaded.value = true
 
@@ -35,11 +52,12 @@ export function useCurrency() {
 
       const favoriteCurrencies = getFavouriteCurrencies()
       conversionRates.value = sortRates(fetchedRates, favoriteCurrencies)
+
+      calculateTargetValue()
     } catch (error) {
       console.error('Failed to fetch rates:', error)
     } finally {
       isLoaded.value = false
-      calculateTargetValue()
     }
   }
 
@@ -50,12 +68,6 @@ export function useCurrency() {
     targetCurrency.label = tempLabel
     localStorage.setItem('cc-target-rate', targetCurrency.label)
     loadRates()
-  }
-
-  const calculateTargetValue = () => {
-    const targetRate =
-      conversionRates.value.find((rate) => rate.label === targetCurrency.label)?.value || 1
-    culcResult.value = Number((baseCurrency.value * targetRate).toFixed(3))
   }
 
   const updateBaseValue = (value: string) => {
@@ -77,17 +89,6 @@ export function useCurrency() {
       localStorage.setItem('cc-target-rate', targetCurrency.label)
     }
     loadRates()
-  }
-
-  const sortRates = (
-    rates: CurrencyRateItem[],
-    favoriteCurrencies: Set<string>,
-  ): CurrencyRateItem[] => {
-    return rates.sort((a, b) => {
-      const aIsFavorite = favoriteCurrencies.has(a.label) ? 1 : 0
-      const bIsFavorite = favoriteCurrencies.has(b.label) ? 1 : 0
-      return bIsFavorite - aIsFavorite
-    })
   }
 
   return {
