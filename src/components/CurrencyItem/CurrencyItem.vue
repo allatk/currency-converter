@@ -1,7 +1,7 @@
 <template>
   <li class="currency-item">
     <div class="currency-item-code">{{ rate.label }}</div>
-    <div class="currency-item-value">{{ rate.value.toFixed(3) }}</div>
+    <div class="currency-item-value">{{ rate.value }}</div>
     <button class="currency-item-btn" @click="toggleFavourite(rate.label)">
       <div
         :style="{

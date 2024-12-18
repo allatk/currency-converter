@@ -1,4 +1,4 @@
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { getCurrency } from '@/services/api/currency-api/index'
 import { useFavouriteCurrencies } from '@/composables/useFavouriteCurrencies'
 import type { CurrencyRateItem } from '@/services/api/currency-api/types'
@@ -36,7 +36,7 @@ export function useCurrency() {
   const calculateTargetValue = () => {
     const targetRate =
       conversionRates.value.find((rate) => rate.label === targetCurrency.label)?.value || 1
-    culcResult.value = Number((baseCurrency.value * targetRate).toFixed(3))
+    culcResult.value = Number((baseCurrency.value * targetRate).toFixed(5))
   }
 
   const loadRates = async () => {
@@ -64,32 +64,37 @@ export function useCurrency() {
   const swapCurrencies = () => {
     const tempLabel = baseCurrency.label
     baseCurrency.label = targetCurrency.label
-    localStorage.setItem('cc-base-rate', baseCurrency.label)
     targetCurrency.label = tempLabel
-    localStorage.setItem('cc-target-rate', targetCurrency.label)
-    loadRates()
   }
 
   const updateBaseValue = (value: string) => {
     baseCurrency.value = Number(value)
-    loadRates()
   }
 
   const setBaseCurrency = (label: string) => {
-    if (baseCurrency.label !== label) {
-      baseCurrency.label = label
-      localStorage.setItem('cc-base-rate', baseCurrency.label)
-    }
-    loadRates()
+    baseCurrency.label = label
   }
 
   const setTargetCurrency = (label: string) => {
-    if (targetCurrency.label !== label) {
-      targetCurrency.label = label
-      localStorage.setItem('cc-target-rate', targetCurrency.label)
-    }
-    loadRates()
+    targetCurrency.label = label
   }
+
+  watch(
+    () => baseCurrency,
+    (newBaseCurrency) => {
+      localStorage.setItem('cc-base-rate', newBaseCurrency.label)
+      loadRates()
+    },
+    { deep: true },
+  )
+
+  watch(
+    () => targetCurrency.label,
+    (newLabel) => {
+      localStorage.setItem('cc-target-rate', newLabel)
+      loadRates()
+    },
+  )
 
   return {
     conversionRates,

@@ -4,7 +4,7 @@
       :options="options"
       :model-value="modelValue"
       @option:selected="handleChange"
-      :clearSearchOnBlur="false"
+      :clearSearchOnSelect="true"
       :clearable="false"
     >
     </v-select>
